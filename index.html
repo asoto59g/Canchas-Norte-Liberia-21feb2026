@@ -1,103 +1,137 @@
 <!doctype html>
-<html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
-        <meta name="mobile-web-app-capable" content="yes">
-        <meta name="apple-mobile-web-app-capable" content="yes">
-        <link rel="stylesheet" href="./resources/ol.css">
-        <link rel="stylesheet" href="resources/fontawesome-all.min.css">
-        <link href="resources/photon-geocoder-autocomplete.min.css" rel="stylesheet">
-        <link rel="stylesheet" href="./resources/ol-layerswitcher.css">
-        <link rel="stylesheet" href="./resources/qgis2web.css">
-        <style>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+
+    <link rel="stylesheet" href="./resources/ol.css">
+    <link rel="stylesheet" href="resources/fontawesome-all.min.css">
+    <link href="resources/photon-geocoder-autocomplete.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="./resources/ol-layerswitcher.css">
+    <link rel="stylesheet" href="./resources/qgis2web.css">
+
+    <title>Salud Vegetal Canchas Liberia</title>
+
+    <style>
         html, body {
             background-color: #ffffff;
-        }
-        .ol-control > * {
-            background-color: #f8f8f8!important;
-            color: #444444!important;
-            border-radius: 0px;
-        }
-        .ol-attribution a, .gcd-gl-input::placeholder, .search-layer-input-search::placeholder {
-            color: #444444!important;
-        }
-        .search-layer-input-search {
-            background-color: #f8f8f8!important;
-        }
-        .ol-control > *:focus, .ol-control >*:hover {
-            background-color: rgba(248, 248, 248, 0.7)!important;
-        } 
-        .ol-control {
-            background-color: rgba(255,255,255,.4) !important;
-            padding: 2px !important;
-        } 
-        </style>
-
-        <style>
-  #map-title {
-    position: absolute;
-    top: 10px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 1000;
-    font-size: 22px;
-    font-weight: bold;
-    background: rgba(255,255,255,0.9);
-    padding: 8px 20px;
-    border-radius: 10px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
-    font-family: Arial, sans-serif;
-}
- #custom-legends {
-    position: absolute;
-    top: 140px;
-    left: 10px;
-    z-index: 1000;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-.legend-img {
-    width: 180px;       /* ajusta tamaño */
-    background: white;  /* opcional */
-    padding: 5px;
-    border-radius: 8px;
-    box-shadow: 0 0 5px rgba(0,0,0,0.4);
-}     
-html, body, #map {
+            margin: 0;
+            padding: 0;
             width: 100%;
             height: 100%;
-            padding: 0;
-            margin: 0;
+            font-family: Arial, sans-serif;
         }
-        </style>
-        <title></title>
-    </head>
-    <body>
-        <div id="map">
+
+        #map {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* CONTROLES OPENLAYERS */
+        .ol-control > * {
+            background-color: #f8f8f8 !important;
+            color: #444 !important;
+            border-radius: 6px;
+        }
+
+        .ol-control > *:hover {
+            background-color: rgba(248,248,248,0.7) !important;
+        }
+
+        .ol-control {
+            background-color: rgba(255,255,255,.4) !important;
+            padding: 4px !important;
+            border-radius: 8px;
+        }
+
+        .ol-attribution a,
+        .gcd-gl-input::placeholder,
+        .search-layer-input-search::placeholder {
+            color: #444 !important;
+        }
+
+        /* TITULO */
+        #map-title {
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+            font-size: clamp(14px, 4vw, 22px);
+            font-weight: bold;
+            background: rgba(255,255,255,0.9);
+            padding: 6px 14px;
+            border-radius: 12px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+            text-align: center;
+        }
+
+        /* LEYENDAS */
+        #custom-legends {
+            position: absolute;
+            top: 140px;
+            left: 10px;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .legend-img {
+            width: clamp(100px, 35vw, 180px);
+            max-width: 90vw;
+            height: auto;
+            background: white;
+            padding: 5px;
+            border-radius: 8px;
+            box-shadow: 0 0 6px rgba(0,0,0,0.4);
+        }
+
+        /* AJUSTES MOVIL */
+        @media (max-width: 768px) {
+            #custom-legends {
+                top: auto;
+                bottom: 20px;
+                left: 50%;
+                transform: translateX(-50%);
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div id="map">
+
     <div id="map-title">
-    Salud Vegetal canchas Liberia 21 febrero 2026
+        Salud Vegetal canchas Liberia 21 febrero 2026
     </div>
+
     <div id="custom-legends">
-    <img src="images/TITULO.png" class="legend-img">
-    <img src="images/vari_legend.png" class="legend-img">
-    <img src="images/gli_legend.png" class="legend-img">
+        <img src="images/TITULO.png" class="legend-img">
+        <img src="images/vari_legend.png" class="legend-img">
+        <img src="images/gli_legend.png" class="legend-img">
+    </div>
+
+    <div id="popup" class="ol-popup">
+        <a href="#" id="popup-closer" class="ol-popup-closer"></a>
+        <div id="popup-content"></div>
+    </div>
+
 </div>
-            <div id="popup" class="ol-popup">
-                <a href="#" id="popup-closer" class="ol-popup-closer"></a>
-                <div id="popup-content"></div>
-            </div>
-        </div>
-        <script src="resources/qgis2web_expressions.js"></script>
-        <script src="./resources/functions.js"></script>
-        <script src="./resources/ol.js"></script>
-        <script src="./resources/ol-layerswitcher.js"></script>
-        <script src="resources/photon-geocoder-autocomplete.min.js"></script>
-        <script src="./layers/layers.js" type="text/javascript"></script> 
-        <script src="./resources/Autolinker.min.js"></script>
-        <script src="./resources/qgis2web.js"></script>        
-    </body>
+
+<script src="resources/qgis2web_expressions.js"></script>
+<script src="./resources/functions.js"></script>
+<script src="./resources/ol.js"></script>
+<script src="./resources/ol-layerswitcher.js"></script>
+<script src="resources/photon-geocoder-autocomplete.min.js"></script>
+<script src="./layers/layers.js"></script>
+<script src="./resources/Autolinker.min.js"></script>
+<script src="./resources/qgis2web.js"></script>
+
+</body>
 </html>
