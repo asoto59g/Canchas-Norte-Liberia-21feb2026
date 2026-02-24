@@ -13,20 +13,51 @@
     <link rel="stylesheet" href="./resources/ol-layerswitcher.css">
     <link rel="stylesheet" href="./resources/qgis2web.css">
 
-    <title>Salud Vegetal Canchas Liberia</title>
+    <title>Salud Vegetal - Canchas Liberia</title>
 
     <style>
         html, body {
-            background-color: #ffffff;
             margin: 0;
             padding: 0;
-            width: 100%;
             height: 100%;
             font-family: Arial, sans-serif;
         }
 
-        #map {
+        /* CONTENEDOR PRINCIPAL */
+        #app-container {
+            display: flex;
             width: 100%;
+            height: 100vh;
+        }
+
+        /* PANEL LATERAL */
+        #sidebar {
+            width: 300px;
+            background: #ffffff;
+            padding: 20px;
+            box-shadow: 2px 0 6px rgba(0,0,0,0.2);
+            overflow-y: auto;
+            z-index: 1;
+        }
+
+        #sidebar h2 {
+            margin-top: 0;
+        }
+
+        #sidebar hr {
+            margin: 15px 0;
+        }
+
+        .legend-img {
+            width: 100%;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            box-shadow: 0 0 6px rgba(0,0,0,0.2);
+        }
+
+        /* MAPA */
+        #map {
+            flex: 1;
             height: 100%;
         }
 
@@ -37,67 +68,26 @@
             border-radius: 6px;
         }
 
-        .ol-control > *:hover {
-            background-color: rgba(248,248,248,0.7) !important;
-        }
-
         .ol-control {
             background-color: rgba(255,255,255,.4) !important;
             padding: 4px !important;
             border-radius: 8px;
         }
 
-        .ol-attribution a,
-        .gcd-gl-input::placeholder,
-        .search-layer-input-search::placeholder {
-            color: #444 !important;
-        }
-
-        /* TITULO */
-        #map-title {
-            position: absolute;
-            top: 10px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 1000;
-            font-size: clamp(14px, 4vw, 22px);
-            font-weight: bold;
-            background: rgba(255,255,255,0.9);
-            padding: 6px 14px;
-            border-radius: 12px;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
-            text-align: center;
-        }
-
-        /* LEYENDAS */
-        #custom-legends {
-            position: absolute;
-            top: 140px;
-            left: 10px;
-            z-index: 1000;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .legend-img {
-            width: clamp(100px, 35vw, 180px);
-            max-width: 90vw;
-            height: auto;
-            background: white;
-            padding: 5px;
-            border-radius: 8px;
-            box-shadow: 0 0 6px rgba(0,0,0,0.4);
-        }
-
-        /* AJUSTES MOVIL */
+        /* RESPONSIVE MOVIL */
         @media (max-width: 768px) {
-            #custom-legends {
-                top: auto;
-                bottom: 20px;
-                left: 50%;
-                transform: translateX(-50%);
-                align-items: center;
+            #app-container {
+                flex-direction: column;
+            }
+
+            #sidebar {
+                width: 100%;
+                height: auto;
+                box-shadow: none;
+            }
+
+            #map {
+                height: 70vh;
             }
         }
     </style>
@@ -105,21 +95,31 @@
 
 <body>
 
-<div id="map">
+<div id="app-container">
 
-    <div id="map-title">
-        Salud Vegetal canchas Liberia 21 febrero 2026
-    </div>
+    <!-- PANEL LATERAL -->
+    <div id="sidebar">
+        <h2>Salud Vegetal</h2>
+        <p>
+            Canchas Liberia<br>
+            21 febrero 2026
+        </p>
 
-    <div id="custom-legends">
+        <hr>
+
+        <h3>Leyendas</h3>
+
         <img src="images/TITULO.png" class="legend-img">
         <img src="images/vari_legend.png" class="legend-img">
         <img src="images/gli_legend.png" class="legend-img">
     </div>
 
-    <div id="popup" class="ol-popup">
-        <a href="#" id="popup-closer" class="ol-popup-closer"></a>
-        <div id="popup-content"></div>
+    <!-- MAPA -->
+    <div id="map">
+        <div id="popup" class="ol-popup">
+            <a href="#" id="popup-closer" class="ol-popup-closer"></a>
+            <div id="popup-content"></div>
+        </div>
     </div>
 
 </div>
