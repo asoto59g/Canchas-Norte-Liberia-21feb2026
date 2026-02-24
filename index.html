@@ -4,8 +4,6 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-capable" content="yes">
 
 <link rel="stylesheet" href="./resources/ol.css">
 <link rel="stylesheet" href="resources/fontawesome-all.min.css">
@@ -120,11 +118,6 @@ html, body {
         font-size: 20px;
         cursor: pointer;
     }
-
-    /* OCULTAR BOTON CUANDO MENU ESTA ABIERTO */
-    body.menu-open #menu-toggle {
-        display: none;
-    }
 }
 </style>
 </head>
@@ -171,8 +164,15 @@ const menuBtn = document.getElementById("menu-toggle");
 const sidebar = document.getElementById("sidebar");
 
 menuBtn.addEventListener("click", function() {
+
     sidebar.classList.toggle("active");
-    document.body.classList.toggle("menu-open");
+
+    if (sidebar.classList.contains("active")) {
+        menuBtn.innerHTML = "✖";
+    } else {
+        menuBtn.innerHTML = "☰";
+    }
+
 });
 </script>
 
