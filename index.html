@@ -70,7 +70,7 @@ html, body {
     border-radius: 8px;
 }
 
-/* BOTON MENU MOVIL */
+/* BOTON MENU */
 #menu-toggle {
     display: none;
 }
@@ -120,6 +120,11 @@ html, body {
         font-size: 20px;
         cursor: pointer;
     }
+
+    /* OCULTAR BOTON CUANDO MENU ESTA ABIERTO */
+    body.menu-open #menu-toggle {
+        display: none;
+    }
 }
 </style>
 </head>
@@ -162,8 +167,12 @@ html, body {
 <script src="./resources/qgis2web.js"></script>
 
 <script>
-document.getElementById("menu-toggle").addEventListener("click", function() {
-    document.getElementById("sidebar").classList.toggle("active");
+const menuBtn = document.getElementById("menu-toggle");
+const sidebar = document.getElementById("sidebar");
+
+menuBtn.addEventListener("click", function() {
+    sidebar.classList.toggle("active");
+    document.body.classList.toggle("menu-open");
 });
 </script>
 
