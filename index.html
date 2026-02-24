@@ -3,7 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
 
 <link rel="stylesheet" href="./resources/ol.css">
 <link rel="stylesheet" href="resources/fontawesome-all.min.css">
@@ -11,121 +13,119 @@
 <link rel="stylesheet" href="./resources/ol-layerswitcher.css">
 <link rel="stylesheet" href="./resources/qgis2web.css">
 
-<title>Salud Vegetal - Canchas Liberia</title>
+<title>Salud Vegetal</title>
 
 <style>
-html, body {
+
+/* ===== BASE ===== */
+html, body, #map {
+    width: 100%;
+    height: 100%;
     margin: 0;
     padding: 0;
-    height: 100%;
     font-family: Arial, sans-serif;
 }
 
-/* CONTENEDOR PRINCIPAL */
-#app-container {
+/* ===== TITULO ===== */
+#map-title {
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    font-size: 22px;
+    font-weight: bold;
+    background: rgba(255,255,255,0.95);
+    padding: 8px 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+}
+
+/* ===== LEYENDAS ===== */
+#custom-legends {
+    position: absolute;
+    top: 140px;
+    left: 10px;
+    z-index: 1000;
     display: flex;
-    width: 100%;
-    height: 100vh;
-}
-
-/* PANEL LATERAL DESKTOP */
-#sidebar {
-    width: 300px;
-    background: #ffffff;
-    padding: 20px;
-    box-shadow: 2px 0 6px rgba(0,0,0,0.2);
-    overflow-y: auto;
-    z-index: 1;
-}
-
-#sidebar h2 {
-    margin-top: 0;
+    flex-direction: column;
+    gap: 10px;
 }
 
 .legend-img {
-    width: 100%;
-    margin-bottom: 15px;
+    width: 170px;
+    background: white;
+    padding: 5px;
     border-radius: 8px;
-    box-shadow: 0 0 6px rgba(0,0,0,0.2);
+    box-shadow: 0 0 5px rgba(0,0,0,0.4);
 }
 
-/* MAPA */
-#map {
-    flex: 1;
+/* ===== SIDEBAR ===== */
+#sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 280px;
     height: 100%;
+    background: white;
+    box-shadow: 2px 0 8px rgba(0,0,0,0.3);
+    transform: translateX(-100%);
+    transition: 0.3s;
+    z-index: 2000;
+    padding: 20px;
 }
 
-/* CONTROLES OPENLAYERS */
-.ol-control > * {
-    background-color: #f8f8f8 !important;
-    color: #444 !important;
-    border-radius: 6px;
+#sidebar.active {
+    transform: translateX(0);
 }
 
-.ol-control {
-    background-color: rgba(255,255,255,.4) !important;
-    padding: 4px !important;
-    border-radius: 8px;
-}
-
-/* BOTON MENU */
+/* ===== BOTON MENU ===== */
 #menu-toggle {
-    display: none;
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    z-index: 3000;
+    font-size: 22px;
+    background: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 6px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    cursor: pointer;
 }
 
-/* ======== MODO MOVIL ======== */
+/* ===== CUANDO MENU ABIERTO ===== */
+body.menu-open #menu-toggle {
+    left: 300px;
+}
+
+/* ===== RESPONSIVE ===== */
 @media (max-width: 768px) {
 
-    #app-container {
-        display: block;
-        height: 100vh;
+    #map-title {
+        font-size: 16px;
+        padding: 6px 12px;
     }
 
-    #sidebar {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 80%;
-        max-width: 320px;
-        height: 100%;
-        background: white;
-        z-index: 2000;
-        transform: translateX(-100%);
-        transition: transform 0.3s ease;
-        box-shadow: 2px 0 8px rgba(0,0,0,0.3);
-        padding-top: 60px; /* espacio para botón */
+    #custom-legends {
+        top: 120px;
     }
 
-    #sidebar.active {
-        transform: translateX(0);
+    .legend-img {
+        width: 140px;
     }
 
-    #map {
-        width: 100%;
-        height: 100vh;
+    /* BAJAR CONTROLES OPENLAYERS */
+    .ol-zoom {
+        top: 60px !important;
     }
 
-    #menu-toggle {
-        display: block;
-        position: fixed;
-        top: 10px;
-        left: 10px;
-        z-index: 3000;
-        background: white;
-        border: none;
-        padding: 8px 12px;
-        border-radius: 6px;
-        box-shadow: 0 2px 6px rgba(0,0,0,0.3);
-        font-size: 20px;
-        cursor: pointer;
-        transition: left 0.3s ease;
+    .ol-control.ol-bar {
+        top: 140px !important;
     }
 
-    /* MOVER BOTON CUANDO MENU ESTA ABIERTO */
-    body.menu-open #menu-toggle {
-        left: 82%;
-    }
 }
+
 </style>
 </head>
 
@@ -133,26 +133,26 @@ html, body {
 
 <button id="menu-toggle">☰</button>
 
-<div id="app-container">
+<div id="sidebar">
+    <h3>Capas</h3>
+    <!-- Aquí puedes poner controles extra -->
+</div>
 
-    <!-- PANEL LATERAL -->
-    <div id="sidebar">
-        <h2>Salud Vegetal</h2>
-        <p>Canchas Liberia<br>21 febrero 2026</p>
-        <hr>
-        <h3>Leyendas</h3>
+<div id="map">
 
+    <div id="map-title">
+        Salud Vegetal canchas Liberia 21 febrero 2026
+    </div>
+
+    <div id="custom-legends">
         <img src="images/TITULO.png" class="legend-img">
         <img src="images/vari_legend.png" class="legend-img">
         <img src="images/gli_legend.png" class="legend-img">
     </div>
 
-    <!-- MAPA -->
-    <div id="map">
-        <div id="popup" class="ol-popup">
-            <a href="#" id="popup-closer" class="ol-popup-closer"></a>
-            <div id="popup-content"></div>
-        </div>
+    <div id="popup" class="ol-popup">
+        <a href="#" id="popup-closer" class="ol-popup-closer"></a>
+        <div id="popup-content"></div>
     </div>
 
 </div>
