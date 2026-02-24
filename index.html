@@ -1,112 +1,140 @@
 <!doctype html>
 <html lang="es">
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-capable" content="yes">
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
 
-    <link rel="stylesheet" href="./resources/ol.css">
-    <link rel="stylesheet" href="resources/fontawesome-all.min.css">
-    <link href="resources/photon-geocoder-autocomplete.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="./resources/ol-layerswitcher.css">
-    <link rel="stylesheet" href="./resources/qgis2web.css">
+<link rel="stylesheet" href="./resources/ol.css">
+<link rel="stylesheet" href="resources/fontawesome-all.min.css">
+<link href="resources/photon-geocoder-autocomplete.min.css" rel="stylesheet">
+<link rel="stylesheet" href="./resources/ol-layerswitcher.css">
+<link rel="stylesheet" href="./resources/qgis2web.css">
 
-    <title>Salud Vegetal - Canchas Liberia</title>
+<title>Salud Vegetal - Canchas Liberia</title>
 
-    <style>
-        html, body {
-            margin: 0;
-            padding: 0;
-            height: 100%;
-            font-family: Arial, sans-serif;
-        }
+<style>
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: Arial, sans-serif;
+}
 
-        /* CONTENEDOR PRINCIPAL */
-        #app-container {
-            display: flex;
-            width: 100%;
-            height: 100vh;
-        }
+/* CONTENEDOR PRINCIPAL */
+#app-container {
+    display: flex;
+    width: 100%;
+    height: 100vh;
+}
 
-        /* PANEL LATERAL */
-        #sidebar {
-            width: 300px;
-            background: #ffffff;
-            padding: 20px;
-            box-shadow: 2px 0 6px rgba(0,0,0,0.2);
-            overflow-y: auto;
-            z-index: 1;
-        }
+/* PANEL LATERAL DESKTOP */
+#sidebar {
+    width: 300px;
+    background: #ffffff;
+    padding: 20px;
+    box-shadow: 2px 0 6px rgba(0,0,0,0.2);
+    overflow-y: auto;
+    z-index: 1;
+}
 
-        #sidebar h2 {
-            margin-top: 0;
-        }
+#sidebar h2 {
+    margin-top: 0;
+}
 
-        #sidebar hr {
-            margin: 15px 0;
-        }
+.legend-img {
+    width: 100%;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    box-shadow: 0 0 6px rgba(0,0,0,0.2);
+}
 
-        .legend-img {
-            width: 100%;
-            margin-bottom: 15px;
-            border-radius: 8px;
-            box-shadow: 0 0 6px rgba(0,0,0,0.2);
-        }
+/* MAPA */
+#map {
+    flex: 1;
+    height: 100%;
+}
 
-        /* MAPA */
-        #map {
-            flex: 1;
-            height: 100%;
-        }
+/* CONTROLES OPENLAYERS */
+.ol-control > * {
+    background-color: #f8f8f8 !important;
+    color: #444 !important;
+    border-radius: 6px;
+}
 
-        /* CONTROLES OPENLAYERS */
-        .ol-control > * {
-            background-color: #f8f8f8 !important;
-            color: #444 !important;
-            border-radius: 6px;
-        }
+.ol-control {
+    background-color: rgba(255,255,255,.4) !important;
+    padding: 4px !important;
+    border-radius: 8px;
+}
 
-        .ol-control {
-            background-color: rgba(255,255,255,.4) !important;
-            padding: 4px !important;
-            border-radius: 8px;
-        }
+/* BOTON MENU MOVIL */
+#menu-toggle {
+    display: none;
+}
 
-        /* RESPONSIVE MOVIL */
-        @media (max-width: 768px) {
-            #app-container {
-                flex-direction: column;
-            }
+/* ======== MODO MOVIL ======== */
+@media (max-width: 768px) {
 
-            #sidebar {
-                width: 100%;
-                height: auto;
-                box-shadow: none;
-            }
+    #app-container {
+        display: block;
+        height: 100vh;
+    }
 
-            #map {
-                height: 70vh;
-            }
-        }
-    </style>
+    #sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 80%;
+        max-width: 320px;
+        height: 100%;
+        background: white;
+        z-index: 2000;
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+        box-shadow: 2px 0 8px rgba(0,0,0,0.3);
+    }
+
+    #sidebar.active {
+        transform: translateX(0);
+    }
+
+    #map {
+        width: 100%;
+        height: 100vh;
+    }
+
+    #menu-toggle {
+        display: block;
+        position: fixed;
+        top: 10px;
+        left: 10px;
+        z-index: 3000;
+        background: white;
+        border: none;
+        padding: 8px 12px;
+        border-radius: 6px;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+        font-size: 20px;
+        cursor: pointer;
+    }
+}
+</style>
 </head>
 
 <body>
+
+<button id="menu-toggle">☰</button>
 
 <div id="app-container">
 
     <!-- PANEL LATERAL -->
     <div id="sidebar">
         <h2>Salud Vegetal</h2>
-        <p>
-            Canchas Liberia<br>
-            21 febrero 2026
-        </p>
-
+        <p>Canchas Liberia<br>21 febrero 2026</p>
         <hr>
-
         <h3>Leyendas</h3>
 
         <img src="images/TITULO.png" class="legend-img">
@@ -132,6 +160,12 @@
 <script src="./layers/layers.js"></script>
 <script src="./resources/Autolinker.min.js"></script>
 <script src="./resources/qgis2web.js"></script>
+
+<script>
+document.getElementById("menu-toggle").addEventListener("click", function() {
+    document.getElementById("sidebar").classList.toggle("active");
+});
+</script>
 
 </body>
 </html>
